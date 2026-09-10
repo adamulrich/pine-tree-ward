@@ -1,0 +1,5 @@
+node_modules/
+dist/
+outputs/
+.artifact-work/
+public/data/

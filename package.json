@@ -1,0 +1,17 @@
+{
+  "name": "pine-tree-ward-eq",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:logic": "node --test tests/data.test.js",
+    "test": "npm run test:logic && npm run build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vite": "6.4.3"
+  }
+}

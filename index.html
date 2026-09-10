@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Announcements, service opportunities, and lesson schedule for the Pine Tree Ward Elders Quorum." />
+    <meta name="theme-color" content="#173f35" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 76'%3E%3Cpath d='M32 2 12 30h11L7 51h20v23h10V51h20L41 30h11L32 2Z' fill='%23123c32'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <title>Pine Tree Ward Elders Quorum</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="Pine Tree Ward Elders Quorum home">
+          <span class="tree-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 76" role="img">
+              <path d="M32 2 12 30h11L7 51h20v23h10V51h20L41 30h11L32 2Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>
+            <span class="ward-name">Pine Tree Ward</span>
+            <span class="quorum-name">Elders Quorum</span>
+          </span>
+        </a>
+
+        <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="menu-icon" aria-hidden="true"></span>
+          <span>Menu</span>
+        </button>
+
+        <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+          <a href="#announcements">Announcements</a>
+          <a href="#service">Service</a>
+          <a href="#lessons">Lessons</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section id="top" class="hero" aria-labelledby="welcome-title">
+        <div class="hero-inner">
+          <p class="eyebrow">Pine Tree Ward</p>
+          <h1 id="welcome-title">Welcome, Brethren</h1>
+          <p class="hero-copy">Stay up to date with quorum announcements, service opportunities, and upcoming lessons.</p>
+          <nav class="quick-links" aria-label="Page sections">
+            <a href="#announcements"><span aria-hidden="true">▣</span> Announcements</a>
+            <a href="#service"><span aria-hidden="true">♡</span> Service</a>
+            <a href="#lessons"><span aria-hidden="true">▤</span> Lessons</a>
+          </nav>
+        </div>
+      </section>
+
+      <section id="announcements" class="content-section section-light" aria-labelledby="announcements-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <div class="section-icon" aria-hidden="true">!</div>
+            <div>
+              <p class="section-kicker">Stay informed</p>
+              <h2 id="announcements-title">Announcements</h2>
+            </div>
+          </div>
+          <div id="announcements-list" class="item-list" aria-live="polite">
+            <div class="loading-card">Loading announcements…</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="service" class="content-section section-green" aria-labelledby="service-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <div class="section-icon" aria-hidden="true">+</div>
+            <div>
+              <p class="section-kicker">Lift where you stand</p>
+              <h2 id="service-title">Service Opportunities</h2>
+            </div>
+          </div>
+          <div id="service-list" class="item-list" aria-live="polite">
+            <div class="loading-card">Loading service opportunities…</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="lessons" class="content-section section-light" aria-labelledby="lessons-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <div class="section-icon" aria-hidden="true">§</div>
+            <div>
+              <p class="section-kicker">Come prepared</p>
+              <h2 id="lessons-title">Lesson Schedule</h2>
+            </div>
+          </div>
+          <div id="lessons-list" class="item-list lesson-list" aria-live="polite">
+            <div class="loading-card">Loading lessons…</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Pine Tree Ward Elders Quorum</p>
+      <a href="#top">Back to top</a>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
