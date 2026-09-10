@@ -4,6 +4,10 @@ A mobile-first one-page website driven by three published Google Sheets CSV feed
 
 The Temple and Family History and Missionary Efforts sections are placeholders for future ward goals and plans.
 
+## Progressive web app
+
+The production site includes a web app manifest, PNG application icons, and a service worker. Visitors can install it from a supported browser. The service worker uses the network first so published spreadsheet and bulletin changes remain fresh, then falls back to previously cached pages and data when offline.
+
 ## Recurring schedule
 
 Recurring events come from the published `Recurring Schedule` Google Sheets tab. The feed URL is configured in `src/main.js`, and changes appear without rebuilding the website.

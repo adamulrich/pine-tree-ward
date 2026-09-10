@@ -368,3 +368,11 @@ siteNav.addEventListener("click", (event) => {
 
 renderComeFollowMe();
 Promise.all([...sections.map(loadSection), loadSchedule(), loadBulletins()]);
+
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch((error) => {
+      console.error("Could not register the service worker", error);
+    });
+  });
+}
