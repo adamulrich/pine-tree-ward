@@ -50,6 +50,8 @@ The updater discovers the weekly pages from the manual contents, downloads at mo
 
 The archive groups the Digital and Printout PDFs in `bulletins/manifest.json` by date and displays the newest bulletin first. The production build copies the `bulletins` directory into `dist`, so each automated commit to `main` publishes both the updated manifest and PDFs through the existing GitHub Pages workflow.
 
+The same Apps Script also watches for PDF attachments sent by `adam.ulrich@live.com` in messages whose subject contains `EQ Newsletter`. Newsletter PDFs are stored under `newsletters/`, indexed separately in `newsletters/manifest.json`, and labeled `Newsletter-Archived` in Gmail after the upload and manifest update succeed. A valid `YYYYMMDD` in the attachment filename is used as its archive date; otherwise, the email's sent date is used and prefixed to the stored filename.
+
 ## Update site content
 
 The published Google spreadsheet contains three sheets:
