@@ -4,6 +4,7 @@ import { normalizeRows, parseDate } from "../src/data.js";
 import { parseCsv } from "../src/csv.js";
 import { bulletinDate, groupBulletins } from "../src/bulletins.js";
 import { nextOccurrence, normalizeScheduleRows, scheduleHeaders } from "../src/schedule.js";
+import { currentComeFollowMeLesson, isoWeek, splitLessonTitle } from "../src/come-follow-me.js";
 
 test("parses spreadsheet dates", () => {
   assert.equal(parseDate("09/13/2026").getFullYear(), 2026);
@@ -134,4 +135,28 @@ test("ignores malformed recurring schedule rows", () => {
     Title: "Bad event", Description: "", Frequency: "Monthly", "Week of Month": "", "Day of Week": "Saturday", Time: "10:30 AM", "Starts On": "", "Expires On": "", Link: "",
   }];
   assert.deepEqual(normalizeScheduleRows(rows), []);
+});
+
+test("selects the Come, Follow Me lesson for the current Monday-through-Sunday week", () => {
+  const thursday = currentComeFollowMeLesson(new Date(2026, 8, 10));
+  const sunday = currentComeFollowMeLesson(new Date(2026, 8, 13, 23, 59));
+  const nextMonday = currentComeFollowMeLesson(new Date(2026, 8, 14));
+
+  assert.equal(thursday.week, 37);
+  assert.equal(sunday.week, 37);
+  assert.equal(thursday.readings.length, 6);
+  assert.match(thursday.title, /He Shall Direct Thy Paths/);
+  assert.equal(nextMonday.week, 38);
+  assert.match(nextMonday.title, /God Is My Salvation/);
+});
+
+test("calculates ISO lesson weeks at year boundaries", () => {
+  assert.deepEqual(isoWeek(new Date(2025, 11, 29)), { year: 2026, week: 1 });
+  assert.equal(currentComeFollowMeLesson(new Date(2026, 11, 28)), null);
+});
+
+test("formats an official lesson title for display", () => {
+  const title = splitLessonTitle("September 7–13. “He Shall Direct Thy Paths”: Proverbs 1–4");
+  assert.equal(title.heading, "September 7–13: “He Shall Direct Thy Paths”");
+  assert.equal(title.reading, "Proverbs 1–4");
 });

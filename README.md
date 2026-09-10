@@ -2,6 +2,8 @@
 
 A mobile-first one-page website driven by three published Google Sheets CSV feeds, with a ward bulletin archive generated from `bulletins/manifest.json`.
 
+The Temple and Family History and Missionary Efforts sections are placeholders for future ward goals and plans.
+
 ## Recurring schedule
 
 Recurring events come from the published `Recurring Schedule` Google Sheets tab. The feed URL is configured in `src/main.js`, and changes appear without rebuilding the website.
@@ -21,6 +23,10 @@ Keep these column names unchanged:
 | Link | Optional full web address. |
 
 The site displays each event's next occurrence in the visitor's local time. It removes an event when no occurrence remains on or before its `Expires On` date.
+
+## Come, Follow Me
+
+The Come, Follow Me section selects the current Monday-through-Sunday lesson from the official 2026 Old Testament schedule using the visitor's current date. Lesson and scripture links are stored locally because the Church study site does not allow the browser to read its pages across origins.
 
 ## Bulletin archive
 
@@ -44,6 +50,8 @@ Keep these column names unchanged:
 | Link | Optional full web address. Leave blank when no link is needed. |
 
 The website only reads the published CSV feeds and never writes back to Google Sheets. No workbook or CSV snapshot is included in the production build.
+
+The elders quorum lesson schedule initially shows the next four current entries. The bulletin archive initially shows the four newest bulletin dates. Visitors can expand or collapse either list with its Show all button.
 
 ## Google Sheets data
 

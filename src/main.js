@@ -2,6 +2,7 @@ import { normalizeRows } from "./data.js";
 import { parseCsv } from "./csv.js";
 import { bulletinDate, groupBulletins } from "./bulletins.js";
 import { normalizeScheduleRows, scheduleHeaders } from "./schedule.js";
+import { currentComeFollowMeLesson, splitLessonTitle } from "./come-follow-me.js";
 
 const sections = [
   {
@@ -19,12 +20,14 @@ const sections = [
   {
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBCs8631vmwVW7lFBpljj9qe6jX1ixsyBTQMGzymRQJzipcmEIJB1-fEtiFjFZkc_c4RsK88vPLclH/pub?gid=1834157588&single=true&output=csv",
     target: "lessons-list",
+    toggle: "lessons-toggle",
     empty: "There are no upcoming lessons.",
     error: "The lesson schedule is temporarily unavailable.",
   },
 ];
 
 const scheduleUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBCs8631vmwVW7lFBpljj9qe6jX1ixsyBTQMGzymRQJzipcmEIJB1-fEtiFjFZkc_c4RsK88vPLclH/pub?gid=97794274&single=true&output=csv";
+const compactListSize = 4;
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -81,16 +84,48 @@ function showMessage(target, message, isError = false) {
   target.append(card);
 }
 
+function hideToggle(buttonId) {
+  if (!buttonId) return;
+  const button = document.getElementById(buttonId);
+  button.hidden = true;
+  button.setAttribute("aria-expanded", "false");
+}
+
+function setupExpandableList(buttonId, total, noun, render) {
+  const button = document.getElementById(buttonId);
+  let expanded = false;
+
+  const update = () => {
+    render(expanded ? total : Math.min(compactListSize, total));
+    button.hidden = total <= compactListSize;
+    button.setAttribute("aria-expanded", String(expanded));
+    button.textContent = expanded ? `Show fewer ${noun}` : `Show all ${total} ${noun}`;
+  };
+
+  button.onclick = () => {
+    expanded = !expanded;
+    update();
+  };
+  update();
+}
+
 function renderSection(config, rows) {
   const target = document.getElementById(config.target);
   const items = normalizeRows(rows ?? []);
 
   if (!items.length) {
+    hideToggle(config.toggle);
     showMessage(target, config.empty);
     return;
   }
 
-  target.replaceChildren(...items.map(createItemCard));
+  if (config.toggle) {
+    setupExpandableList(config.toggle, items.length, "lessons", (count) => {
+      target.replaceChildren(...items.slice(0, count).map(createItemCard));
+    });
+  } else {
+    target.replaceChildren(...items.map(createItemCard));
+  }
 }
 
 async function loadSection(config) {
@@ -101,6 +136,7 @@ async function loadSection(config) {
     renderSection(config, parseCsv(await response.text()));
   } catch (error) {
     console.error(`Could not load ${config.target}`, error);
+    hideToggle(config.toggle);
     showMessage(target, config.error, true);
   }
 }
@@ -128,11 +164,19 @@ function renderBulletins(entries) {
   const bulletins = groupBulletins(entries);
 
   if (!bulletins.length) {
+    hideToggle("bulletins-toggle");
     target.setAttribute("aria-busy", "false");
     showMessage(target, "There are no archived bulletins yet.");
     return;
   }
 
+  setupExpandableList("bulletins-toggle", bulletins.length, "bulletins", (count) => {
+    target.replaceChildren(createBulletinTable(bulletins.slice(0, count)));
+  });
+  target.setAttribute("aria-busy", "false");
+}
+
+function createBulletinTable(bulletins) {
   const table = document.createElement("table");
   table.className = "bulletin-table";
   table.innerHTML = "<thead><tr><th scope=\"col\">Bulletin date</th><th scope=\"col\">Digital edition</th><th scope=\"col\">Print edition</th></tr></thead>";
@@ -161,8 +205,7 @@ function renderBulletins(entries) {
   }
 
   table.append(body);
-  target.replaceChildren(table);
-  target.setAttribute("aria-busy", "false");
+  return table;
 }
 
 function renderSchedule(rows, now = new Date()) {
@@ -219,6 +262,65 @@ function renderSchedule(rows, now = new Date()) {
   target.setAttribute("aria-busy", "false");
 }
 
+function renderComeFollowMe(now = new Date()) {
+  const target = document.getElementById("come-follow-me-content");
+  const lesson = currentComeFollowMeLesson(now);
+
+  if (!lesson) {
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "The Come, Follow Me lesson for this week is not available.");
+    return;
+  }
+
+  const { heading, reading } = splitLessonTitle(lesson.title);
+  const article = document.createElement("article");
+  article.className = "come-follow-me-card";
+  const body = document.createElement("div");
+  body.className = "come-follow-me-body";
+
+  const label = document.createElement("p");
+  label.className = "come-follow-me-label";
+  label.textContent = "This week's lesson";
+
+  const title = document.createElement("h3");
+  const titleLink = document.createElement("a");
+  titleLink.href = lesson.url;
+  titleLink.target = "_blank";
+  titleLink.rel = "noopener noreferrer";
+  titleLink.textContent = heading;
+  title.append(titleLink);
+
+  const readings = document.createElement("p");
+  readings.className = "come-follow-me-reading";
+  readings.setAttribute("aria-label", "This week's scripture reading");
+
+  if (lesson.readings.length) {
+    lesson.readings.forEach((item, index) => {
+      if (index) readings.append(document.createTextNode("; "));
+      const link = document.createElement("a");
+      link.href = item.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = item.label;
+      readings.append(link);
+    });
+  } else {
+    readings.textContent = reading;
+  }
+
+  const lessonLink = document.createElement("a");
+  lessonLink.className = "come-follow-me-link";
+  lessonLink.href = lesson.url;
+  lessonLink.target = "_blank";
+  lessonLink.rel = "noopener noreferrer";
+  lessonLink.textContent = "Open this week's lesson";
+
+  body.append(label, title, readings);
+  article.append(body, lessonLink);
+  target.replaceChildren(article);
+  target.setAttribute("aria-busy", "false");
+}
+
 async function loadSchedule() {
   const target = document.getElementById("schedule-list");
 
@@ -242,6 +344,7 @@ async function loadBulletins() {
     renderBulletins(await response.json());
   } catch (error) {
     console.error("Could not load bulletin archive", error);
+    hideToggle("bulletins-toggle");
     target.setAttribute("aria-busy", "false");
     showMessage(target, "The bulletin archive is temporarily unavailable.", true);
   }
@@ -263,4 +366,5 @@ siteNav.addEventListener("click", (event) => {
   }
 });
 
+renderComeFollowMe();
 Promise.all([...sections.map(loadSection), loadSchedule(), loadBulletins()]);
