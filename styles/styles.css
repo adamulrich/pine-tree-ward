@@ -203,7 +203,8 @@ h1 {
 .quick-links .books-icon,
 .quick-links .newspaper-icon,
 .quick-links .handshake-icon,
-.quick-links .clipboard-icon { width: 1.3em; height: 1.3em; display: block; }
+.quick-links .clipboard-icon,
+.quick-links .footprints-icon { width: 1.3em; height: 1.3em; display: block; }
 
 .content-section { scroll-margin-top: 76px; }
 .section-inner { padding: 3.5rem 0; }
@@ -232,7 +233,8 @@ h1 {
 .section-icon .books-icon,
 .section-icon .newspaper-icon,
 .section-icon .handshake-icon,
-.section-icon .clipboard-icon { width: 30px; height: 30px; display: block; }
+.section-icon .clipboard-icon,
+.section-icon .footprints-icon { width: 30px; height: 30px; display: block; }
 
 .section-kicker { color: var(--green-700); }
 h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.6rem); line-height: 1.12; }
