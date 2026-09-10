@@ -421,6 +421,11 @@ async function loadNewsletters() {
 const menuButton = document.querySelector(".menu-button");
 const siteNav = document.getElementById("site-nav");
 
+function closeMenu() {
+  menuButton.setAttribute("aria-expanded", "false");
+  siteNav.classList.remove("is-open");
+}
+
 menuButton.addEventListener("click", () => {
   const open = menuButton.getAttribute("aria-expanded") === "true";
   menuButton.setAttribute("aria-expanded", String(!open));
@@ -429,9 +434,20 @@ menuButton.addEventListener("click", () => {
 
 siteNav.addEventListener("click", (event) => {
   if (event.target instanceof HTMLAnchorElement) {
-    menuButton.setAttribute("aria-expanded", "false");
-    siteNav.classList.remove("is-open");
+    closeMenu();
   }
+});
+
+document.addEventListener("click", (event) => {
+  if (menuButton.getAttribute("aria-expanded") !== "true") return;
+  if (menuButton.contains(event.target) || siteNav.contains(event.target)) return;
+  closeMenu();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || menuButton.getAttribute("aria-expanded") !== "true") return;
+  closeMenu();
+  menuButton.focus();
 });
 
 renderComeFollowMe();
