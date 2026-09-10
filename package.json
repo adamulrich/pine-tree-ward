@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build && node scripts/copy-bulletins.js",
     "preview": "vite preview",
+    "update:come-follow-me": "node scripts/update-come-follow-me.js",
     "test:logic": "node --test tests/data.test.js",
     "test": "npm run test:logic && npm run build"
   },

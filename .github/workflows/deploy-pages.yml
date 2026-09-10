@@ -18,10 +18,10 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://pine-tree-ward.ulrichlabs.dev
     runs-on: ubuntu-latest
     env:
-      VITE_BASE_PATH: /pine-tree-ward/
+      VITE_BASE_PATH: /
     steps:
       - name: Check out repository
         uses: actions/checkout@v6

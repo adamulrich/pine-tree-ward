@@ -28,6 +28,20 @@ The site displays each event's next occurrence in the visitor's local time. It r
 
 The Come, Follow Me section selects the current Monday-through-Sunday lesson from the official 2026 Old Testament schedule using the visitor's current date. Lesson and scripture links are stored locally because the Church study site does not allow the browser to read its pages across origins.
 
+Refresh the checked-in lesson titles and scripture links from the currently configured official manual with:
+
+```bash
+npm run update:come-follow-me
+```
+
+To switch to a newly published manual, provide its year and either its URL slug or full URL:
+
+```bash
+npm run update:come-follow-me -- --year 2027 --manual come-follow-me-for-home-and-church-new-testament-2027
+```
+
+The updater discovers the weekly pages from the manual contents, downloads at most six pages concurrently, retries temporary server errors, validates the result, and replaces only the marked generated data block in `src/come-follow-me.js`.
+
 ## Bulletin archive
 
 The archive groups the Digital and Printout PDFs in `bulletins/manifest.json` by date and displays the newest bulletin first. The production build copies the `bulletins` directory into `dist`, so each automated commit to `main` publishes both the updated manifest and PDFs through the existing GitHub Pages workflow.
@@ -80,4 +94,4 @@ The production site is created in `dist`.
 
 The workflow in `.github/workflows/deploy-pages.yml` builds and publishes the site whenever `main` is updated. In the GitHub repository, open **Settings → Pages** and select **GitHub Actions** as the source.
 
-The deployment workflow sets the GitHub Pages base path to `/pine-tree-ward/`. Change `VITE_BASE_PATH` in the workflow if the repository has a different name or the site uses a custom domain. Local builds use relative asset paths so the `dist` folder also works with an ordinary static server.
+The deployment workflow publishes the site at `https://pine-tree-ward.ulrichlabs.dev` and sets the Vite base path to `/` for that custom domain. Local builds use relative asset paths so the `dist` folder also works with an ordinary static server.

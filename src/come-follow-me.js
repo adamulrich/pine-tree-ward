@@ -1,4 +1,6 @@
-// Official 2026 Come, Follow Me—For Home and Church: Old Testament schedule.
+// BEGIN GENERATED COME FOLLOW ME DATA
+// Updated by scripts/update-come-follow-me.js from the official Church manual.
+const scheduleYear = 2026;
 const lessons = [
   {
     "week": 1,
@@ -12,11 +14,11 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/02?lang=eng",
     "readings": [
       {
-        "label": "Moses 1",
+        "label": "Moses 1",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/pgp/moses/1?lang=eng"
       },
       {
-        "label": "Abraham 3",
+        "label": "Abraham 3",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/pgp/abr/3?lang=eng"
       }
     ]
@@ -61,11 +63,11 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/05?lang=eng",
     "readings": [
       {
-        "label": "Genesis 5",
+        "label": "Genesis 5",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/gen/5?lang=eng"
       },
       {
-        "label": "Moses 6",
+        "label": "Moses 6",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/pgp/moses/6?lang=eng"
       }
     ]
@@ -91,7 +93,7 @@ const lessons = [
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/gen/6?lang=eng"
       },
       {
-        "label": "Moses 8",
+        "label": "Moses 8",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/pgp/moses/8?lang=eng"
       }
     ]
@@ -223,7 +225,7 @@ const lessons = [
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/ex/35?lang=eng"
       },
       {
-        "label": "Leviticus 1",
+        "label": "Leviticus 1",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/lev/1?lang=eng"
       },
       {
@@ -330,7 +332,7 @@ const lessons = [
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/ruth/1?lang=eng"
       },
       {
-        "label": "1 Samuel 1–7",
+        "label": "1 Samuel 1–7",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/1?lang=eng"
       }
     ]
@@ -341,7 +343,7 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/24?lang=eng",
     "readings": [
       {
-        "label": "1 Samuel 8–10",
+        "label": "1 Samuel 8–10",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/8?lang=eng"
       },
       {
@@ -360,7 +362,7 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/25?lang=eng",
     "readings": [
       {
-        "label": "1 Samuel 17–18",
+        "label": "1 Samuel 17–18",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/17?lang=eng"
       },
       {
@@ -368,7 +370,7 @@ const lessons = [
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/1-sam/24?lang=eng"
       },
       {
-        "label": "2 Samuel 5–7",
+        "label": "2 Samuel 5–7",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/2-sam/5?lang=eng"
       }
     ]
@@ -379,11 +381,11 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/26?lang=eng",
     "readings": [
       {
-        "label": "2 Samuel 11–12",
+        "label": "2 Samuel 11–12",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/2-sam/11?lang=eng"
       },
       {
-        "label": "1 Kings 3",
+        "label": "1 Kings 3",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/3?lang=eng"
       },
       {
@@ -398,11 +400,11 @@ const lessons = [
   },
   {
     "week": 27,
-    "title": "June 29–July 5.  “If the Lord Be God, Follow Him”: 1 Kings 12–13; 17–22",
+    "title": "June 29–July 5. “If the Lord Be God, Follow Him”: 1 Kings 12–13; 17–22",
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/27?lang=eng",
     "readings": [
       {
-        "label": "1 Kings 12–13",
+        "label": "1 Kings 12–13",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/1-kgs/12?lang=eng"
       },
       {
@@ -417,7 +419,7 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/28?lang=eng",
     "readings": [
       {
-        "label": "2 Kings 2–7",
+        "label": "2 Kings 2–7",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/2?lang=eng"
       }
     ]
@@ -428,7 +430,7 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/29?lang=eng",
     "readings": [
       {
-        "label": "2 Kings 16–25",
+        "label": "2 Kings 16–25",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/2-kgs/16?lang=eng"
       }
     ]
@@ -439,7 +441,7 @@ const lessons = [
     "url": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/30?lang=eng",
     "readings": [
       {
-        "label": "2 Chronicles 14–20",
+        "label": "2 Chronicles 14–20",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/2-chr/14?lang=eng"
       },
       {
@@ -466,7 +468,7 @@ const lessons = [
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/ezra/3?lang=eng"
       },
       {
-        "label": "Nehemiah 2",
+        "label": "Nehemiah 2",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/neh/2?lang=eng"
       },
       {
@@ -741,7 +743,7 @@ const lessons = [
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/jer/36?lang=eng"
       },
       {
-        "label": "Lamentations 1",
+        "label": "Lamentations 1",
         "url": "https://www.churchofjesuschrist.org/study/scriptures/ot/lam/1?lang=eng"
       },
       {
@@ -882,6 +884,7 @@ const lessons = [
     "readings": []
   }
 ];
+// END GENERATED COME FOLLOW ME DATA
 
 export function isoWeek(date = new Date()) {
   const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -895,7 +898,7 @@ export function isoWeek(date = new Date()) {
 
 export function currentComeFollowMeLesson(date = new Date()) {
   const current = isoWeek(date);
-  if (current.year !== 2026) return null;
+  if (current.year !== scheduleYear) return null;
   return lessons.find((lesson) => lesson.week === current.week) ?? null;
 }
 
