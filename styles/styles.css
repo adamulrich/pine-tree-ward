@@ -254,6 +254,8 @@ h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.
   text-transform: uppercase;
 }
 .item-text { margin-bottom: 0; color: var(--ink); font-size: 1.08rem; font-weight: 650; }
+.schedule-title { margin: 0 0 0.25rem; color: var(--green-950); font-size: 1.35rem; line-height: 1.25; }
+.schedule-recurrence { margin: 0.7rem 0 0; color: var(--muted); font-weight: 700; }
 .item-link {
   min-height: 50px;
   padding: 0.65rem 1.15rem;
@@ -272,6 +274,53 @@ h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.
 .loading-card,
 .status-card { padding: 1.2rem; color: var(--muted); }
 .error-card { border-left-color: #a32929; color: #7a1717; }
+
+.bulletin-container {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgb(12 43 36 / 9%);
+}
+
+.bulletin-container > .loading-card,
+.bulletin-container > .status-card {
+  border: 0;
+  border-left: 7px solid var(--green-700);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.bulletin-container > .error-card { border-left-color: #a32929; }
+
+.bulletin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.bulletin-table th,
+.bulletin-table td { padding: 1rem 1.2rem; }
+.bulletin-table thead { background: var(--green-950); color: #fff; }
+.bulletin-table tbody tr + tr { border-top: 1px solid var(--line); }
+.bulletin-table tbody th { color: var(--green-950); font-size: 1.05rem; }
+.bulletin-table tbody tr:nth-child(even) { background: #f5f8f6; }
+
+.bulletin-link {
+  min-height: 48px;
+  padding: 0.55rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--green-800);
+  border-radius: 6px;
+  color: var(--green-900);
+  font-weight: 800;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.bulletin-link:hover { background: var(--green-900); color: #fff; }
+.bulletin-unavailable { color: var(--muted); font-style: italic; }
 
 .site-footer {
   padding: 2rem 1rem;
@@ -332,11 +381,42 @@ h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.
   .item-text { overflow-wrap: anywhere; }
 }
 
+@media (max-width: 600px) {
+  .bulletin-container { overflow: visible; border: 0; background: transparent; box-shadow: none; }
+  .bulletin-table,
+  .bulletin-table tbody,
+  .bulletin-table tr,
+  .bulletin-table th,
+  .bulletin-table td { display: block; width: 100%; }
+  .bulletin-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .bulletin-table tbody { display: grid; gap: 1rem; }
+  .bulletin-table tbody tr {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-left: 7px solid var(--green-700);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 3px 10px rgb(12 43 36 / 9%);
+  }
+  .bulletin-table tbody tr + tr { border-top: 1px solid var(--line); }
+  .bulletin-table tbody th { padding: 1rem 1rem 0.75rem; }
+  .bulletin-table tbody td {
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .bulletin-table tbody td::before { content: attr(data-label); font-weight: 800; }
+  .bulletin-link { min-width: 140px; }
+}
+
 @media (min-width: 700px) {
   .menu-button { display: none; }
   .site-nav { position: static; display: flex; border: 0; box-shadow: none; }
   .site-nav a { min-height: 48px; padding: 0.5rem 0.8rem; border: 0; border-radius: 5px; }
-  .quick-links { grid-template-columns: repeat(3, 1fr); }
+  .quick-links { grid-template-columns: repeat(5, 1fr); }
   .item-card { display: flex; align-items: stretch; justify-content: space-between; }
   .item-body { padding: 1.25rem 1.4rem; }
   .item-link { width: 155px; flex: 0 0 155px; justify-content: center; gap: 0.6rem; border-top: 0; border-left: 1px solid var(--line); }

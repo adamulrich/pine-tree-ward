@@ -1,5 +1,7 @@
 import { normalizeRows } from "./data.js";
 import { parseCsv } from "./csv.js";
+import { bulletinDate, groupBulletins } from "./bulletins.js";
+import { nextOccurrence, recurringScheduleItems } from "./schedule.js";
 
 const sections = [
   {
@@ -24,6 +26,12 @@ const sections = [
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+
+const bulletinDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
   day: "numeric",
   year: "numeric",
 });
@@ -95,6 +103,112 @@ async function loadSection(config) {
   }
 }
 
+function createBulletinLink(bulletin, label, date) {
+  if (!bulletin) {
+    const unavailable = document.createElement("span");
+    unavailable.className = "bulletin-unavailable";
+    unavailable.textContent = "Unavailable";
+    return unavailable;
+  }
+
+  const link = document.createElement("a");
+  link.className = "bulletin-link";
+  link.href = bulletin.path.split("/").map(encodeURIComponent).join("/");
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = `${label} PDF`;
+  link.setAttribute("aria-label", `Open ${label} bulletin for ${date}`);
+  return link;
+}
+
+function renderBulletins(entries) {
+  const target = document.getElementById("bulletins-list");
+  const bulletins = groupBulletins(entries);
+
+  if (!bulletins.length) {
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "There are no archived bulletins yet.");
+    return;
+  }
+
+  const table = document.createElement("table");
+  table.className = "bulletin-table";
+  table.innerHTML = "<thead><tr><th scope=\"col\">Bulletin date</th><th scope=\"col\">Digital edition</th><th scope=\"col\">Print edition</th></tr></thead>";
+  const body = document.createElement("tbody");
+
+  for (const bulletin of bulletins) {
+    const formattedDate = bulletinDateFormatter.format(bulletinDate(bulletin.date));
+    const row = document.createElement("tr");
+    const dateCell = document.createElement("th");
+    dateCell.scope = "row";
+    const time = document.createElement("time");
+    time.dateTime = `${bulletin.date.slice(0, 4)}-${bulletin.date.slice(4, 6)}-${bulletin.date.slice(6, 8)}`;
+    time.textContent = formattedDate;
+    dateCell.append(time);
+
+    const digitalCell = document.createElement("td");
+    digitalCell.dataset.label = "Digital";
+    digitalCell.append(createBulletinLink(bulletin.digital, "Digital", formattedDate));
+
+    const printoutCell = document.createElement("td");
+    printoutCell.dataset.label = "Print";
+    printoutCell.append(createBulletinLink(bulletin.printout, "Print", formattedDate));
+
+    row.append(dateCell, digitalCell, printoutCell);
+    body.append(row);
+  }
+
+  table.append(body);
+  target.replaceChildren(table);
+  target.setAttribute("aria-busy", "false");
+}
+
+function renderSchedule(now = new Date()) {
+  const target = document.getElementById("schedule-list");
+  const cards = recurringScheduleItems.map((item) => {
+    const occurrence = nextOccurrence(item, now);
+    const article = document.createElement("article");
+    article.className = "item-card schedule-card";
+
+    const body = document.createElement("div");
+    body.className = "item-body";
+    const time = document.createElement("time");
+    time.className = "item-date";
+    time.dateTime = occurrence.toISOString();
+    time.textContent = `${bulletinDateFormatter.format(occurrence)} at ${occurrence.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`;
+
+    const title = document.createElement("h3");
+    title.className = "schedule-title";
+    title.textContent = item.title;
+    const description = document.createElement("p");
+    description.className = "item-text";
+    description.textContent = item.description;
+    const recurrence = document.createElement("p");
+    recurrence.className = "schedule-recurrence";
+    recurrence.textContent = item.recurrence;
+
+    body.append(time, title, description, recurrence);
+    article.append(body);
+    return article;
+  });
+
+  target.replaceChildren(...cards);
+}
+
+async function loadBulletins() {
+  const target = document.getElementById("bulletins-list");
+
+  try {
+    const response = await fetch("bulletins/manifest.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+    renderBulletins(await response.json());
+  } catch (error) {
+    console.error("Could not load bulletin archive", error);
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "The bulletin archive is temporarily unavailable.", true);
+  }
+}
+
 const menuButton = document.querySelector(".menu-button");
 const siteNav = document.getElementById("site-nav");
 
@@ -111,4 +225,5 @@ siteNav.addEventListener("click", (event) => {
   }
 });
 
-Promise.all(sections.map(loadSection));
+renderSchedule();
+Promise.all([...sections.map(loadSection), loadBulletins()]);

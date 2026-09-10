@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-bulletins.js",
     "preview": "vite preview",
     "test:logic": "node --test tests/data.test.js",
     "test": "npm run test:logic && npm run build"

@@ -1,6 +1,14 @@
 # Pine Tree Ward Elders Quorum website
 
-A mobile-first one-page website driven by three published Google Sheets CSV feeds.
+A mobile-first one-page website driven by three published Google Sheets CSV feeds, with a ward bulletin archive generated from `bulletins/manifest.json`.
+
+## Recurring schedule
+
+Recurring events are configured in `src/schedule.js`. Each rule specifies its week of the month, weekday, hour, and minute. The website calculates the next occurrence in the visitor's local time and advances to the following month after the scheduled time passes.
+
+## Bulletin archive
+
+The archive groups the Digital and Printout PDFs in `bulletins/manifest.json` by date and displays the newest bulletin first. The production build copies the `bulletins` directory into `dist`, so each automated commit to `main` publishes both the updated manifest and PDFs through the existing GitHub Pages workflow.
 
 ## Update site content
 
