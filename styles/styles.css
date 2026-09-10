@@ -200,6 +200,9 @@ h1 {
 }
 .quick-links a:hover { background: #fff; color: var(--green-950); }
 .quick-links span { color: var(--gold); font-size: 1.3em; }
+.quick-links .footprints-emoji {
+  filter: grayscale(1) brightness(0) invert(82%) sepia(66%) saturate(521%) hue-rotate(351deg) brightness(101%) contrast(90%);
+}
 .quick-links .books-icon,
 .quick-links .newspaper-icon,
 .quick-links .handshake-icon,
@@ -233,6 +236,10 @@ h1 {
 .section-icon .newspaper-icon,
 .section-icon .handshake-icon,
 .section-icon .clipboard-icon { width: 30px; height: 30px; display: block; }
+.section-icon .footprints-emoji {
+  display: block;
+  filter: grayscale(1) brightness(0) invert(1);
+}
 
 .section-kicker { color: var(--green-700); }
 h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.6rem); line-height: 1.12; }
