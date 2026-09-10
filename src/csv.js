@@ -1,4 +1,4 @@
-const requiredHeaders = ["Display Date", "Expires On", "Text", "Link"];
+const defaultHeaders = ["Display Date", "Expires On", "Text", "Link"];
 
 function parseRows(text) {
   const rows = [];
@@ -41,7 +41,7 @@ function parseRows(text) {
   return rows;
 }
 
-export function parseCsv(text) {
+export function parseCsv(text, requiredHeaders = defaultHeaders) {
   const [headerRow = [], ...dataRows] = parseRows(text);
   const headers = headerRow.map((header, index) => (index === 0 ? header.replace(/^\uFEFF/, "") : header).trim());
   const missing = requiredHeaders.filter((header) => !headers.includes(header));

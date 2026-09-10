@@ -4,7 +4,23 @@ A mobile-first one-page website driven by three published Google Sheets CSV feed
 
 ## Recurring schedule
 
-Recurring events are configured in `src/schedule.js`. Each rule specifies its week of the month, weekday, hour, and minute. The website calculates the next occurrence in the visitor's local time and advances to the following month after the scheduled time passes.
+Recurring events come from the published `Recurring Schedule` Google Sheets tab. The feed URL is configured in `src/main.js`, and changes appear without rebuilding the website.
+
+Keep these column names unchanged:
+
+| Column | Use |
+| --- | --- |
+| Title | Short event name. |
+| Description | Optional additional information. |
+| Frequency | `Monthly` or `Weekly`. |
+| Week of Month | For monthly events, a number from 1 through 5. Leave blank for weekly events. |
+| Day of Week | Full weekday name. Weekly events can contain comma-separated days. |
+| Time | Event time, such as `10:30 AM`. |
+| Starts On | Optional first active date. |
+| Expires On | Optional last active date. |
+| Link | Optional full web address. |
+
+The site displays each event's next occurrence in the visitor's local time. It removes an event when no occurrence remains on or before its `Expires On` date.
 
 ## Bulletin archive
 

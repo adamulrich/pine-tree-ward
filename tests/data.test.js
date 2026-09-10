@@ -3,7 +3,7 @@ import test from "node:test";
 import { normalizeRows, parseDate } from "../src/data.js";
 import { parseCsv } from "../src/csv.js";
 import { bulletinDate, groupBulletins } from "../src/bulletins.js";
-import { nextOccurrence, recurringScheduleItems } from "../src/schedule.js";
+import { nextOccurrence, normalizeScheduleRows, scheduleHeaders } from "../src/schedule.js";
 
 test("parses spreadsheet dates", () => {
   assert.equal(parseDate("09/13/2026").getFullYear(), 2026);
@@ -77,7 +77,9 @@ test("rejects a bulletin manifest that is not an array", () => {
 });
 
 test("finds the second Saturday in the current month", () => {
-  const templeSession = recurringScheduleItems[0];
+  const templeSession = {
+    frequency: "monthly", week: 2, weekday: 6, weekdays: [6], hour: 10, minute: 30, startsOn: null, expiresOn: null,
+  };
   const occurrence = nextOccurrence(templeSession, new Date(2026, 8, 1, 9));
 
   assert.equal(occurrence.getFullYear(), 2026);
@@ -88,9 +90,48 @@ test("finds the second Saturday in the current month", () => {
 });
 
 test("moves a recurring item to next month after its scheduled time", () => {
-  const templeSession = recurringScheduleItems[0];
+  const templeSession = {
+    frequency: "monthly", week: 2, weekday: 6, weekdays: [6], hour: 10, minute: 30, startsOn: null, expiresOn: null,
+  };
   const occurrence = nextOccurrence(templeSession, new Date(2026, 8, 12, 10, 31));
 
   assert.equal(occurrence.getMonth(), 9);
   assert.equal(occurrence.getDate(), 10);
+});
+
+test("normalizes monthly and multi-day weekly schedule rows", () => {
+  const csv = "Title,Description,Frequency,Week of Month,Day of Week,Time,Starts On,Expires On,Link\n"
+    + "Temple Session,Monthly temple session,Monthly,2,Saturday,10:30 AM,,,\n"
+    + 'Stake Futsal,Open to all,Weekly,,"Tuesday, Thursday",8:30 PM,,,https://example.org';
+  const items = normalizeScheduleRows(parseCsv(csv, scheduleHeaders), new Date(2026, 8, 9, 9));
+
+  assert.deepEqual(items.map((item) => item.title), ["Stake Futsal", "Temple Session"]);
+  assert.equal(items[0].occurrence.getDate(), 10);
+  assert.equal(items[0].recurrence, "Every Tuesday and Thursday");
+  assert.equal(items[1].occurrence.getDate(), 12);
+  assert.equal(items[1].recurrence, "Every second Saturday");
+});
+
+test("honors recurring schedule start and expiration dates", () => {
+  const rows = [{
+    Title: "Limited event",
+    Description: "",
+    Frequency: "Weekly",
+    "Week of Month": "",
+    "Day of Week": "Tuesday",
+    Time: "3:00 PM",
+    "Starts On": "09/15/2026",
+    "Expires On": "09/21/2026",
+    Link: "",
+  }];
+
+  assert.equal(normalizeScheduleRows(rows, new Date(2026, 8, 9))[0].occurrence.getDate(), 15);
+  assert.equal(normalizeScheduleRows(rows, new Date(2026, 8, 22)).length, 0);
+});
+
+test("ignores malformed recurring schedule rows", () => {
+  const rows = [{
+    Title: "Bad event", Description: "", Frequency: "Monthly", "Week of Month": "", "Day of Week": "Saturday", Time: "10:30 AM", "Starts On": "", "Expires On": "", Link: "",
+  }];
+  assert.deepEqual(normalizeScheduleRows(rows), []);
 });

@@ -1,7 +1,7 @@
 import { normalizeRows } from "./data.js";
 import { parseCsv } from "./csv.js";
 import { bulletinDate, groupBulletins } from "./bulletins.js";
-import { nextOccurrence, recurringScheduleItems } from "./schedule.js";
+import { normalizeScheduleRows, scheduleHeaders } from "./schedule.js";
 
 const sections = [
   {
@@ -23,6 +23,8 @@ const sections = [
     error: "The lesson schedule is temporarily unavailable.",
   },
 ];
+
+const scheduleUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBCs8631vmwVW7lFBpljj9qe6jX1ixsyBTQMGzymRQJzipcmEIJB1-fEtiFjFZkc_c4RsK88vPLclH/pub?gid=97794274&single=true&output=csv";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -163,10 +165,18 @@ function renderBulletins(entries) {
   target.setAttribute("aria-busy", "false");
 }
 
-function renderSchedule(now = new Date()) {
+function renderSchedule(rows, now = new Date()) {
   const target = document.getElementById("schedule-list");
-  const cards = recurringScheduleItems.map((item) => {
-    const occurrence = nextOccurrence(item, now);
+  const items = normalizeScheduleRows(rows, now);
+
+  if (!items.length) {
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "There are no current recurring events.");
+    return;
+  }
+
+  const cards = items.map((item) => {
+    const occurrence = item.occurrence;
     const article = document.createElement("article");
     article.className = "item-card schedule-card";
 
@@ -187,12 +197,40 @@ function renderSchedule(now = new Date()) {
     recurrence.className = "schedule-recurrence";
     recurrence.textContent = item.recurrence;
 
-    body.append(time, title, description, recurrence);
+    body.append(time, title);
+    if (item.description) body.append(description);
+    body.append(recurrence);
     article.append(body);
+
+    if (item.link) {
+      const link = document.createElement("a");
+      link.className = "item-link";
+      link.href = item.link;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = "Details";
+      link.setAttribute("aria-label", `View details: ${item.title}`);
+      article.append(link);
+    }
     return article;
   });
 
   target.replaceChildren(...cards);
+  target.setAttribute("aria-busy", "false");
+}
+
+async function loadSchedule() {
+  const target = document.getElementById("schedule-list");
+
+  try {
+    const response = await fetch(scheduleUrl, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+    renderSchedule(parseCsv(await response.text(), scheduleHeaders));
+  } catch (error) {
+    console.error("Could not load recurring schedule", error);
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "The recurring schedule is temporarily unavailable.", true);
+  }
 }
 
 async function loadBulletins() {
@@ -225,5 +263,4 @@ siteNav.addEventListener("click", (event) => {
   }
 });
 
-renderSchedule();
-Promise.all([...sections.map(loadSection), loadBulletins()]);
+Promise.all([...sections.map(loadSection), loadSchedule(), loadBulletins()]);
