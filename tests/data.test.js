@@ -3,6 +3,7 @@ import test from "node:test";
 import { normalizeRows, parseDate } from "../src/data.js";
 import { parseCsv } from "../src/csv.js";
 import { bulletinDate, groupBulletins } from "../src/bulletins.js";
+import { normalizeNewsletters } from "../src/newsletters.js";
 import { nextOccurrence, normalizeScheduleRows, scheduleHeaders } from "../src/schedule.js";
 import { currentComeFollowMeLesson, isoWeek, splitLessonTitle } from "../src/come-follow-me.js";
 
@@ -75,6 +76,20 @@ test("ignores malformed bulletin entries and preserves an incomplete date", () =
 
 test("rejects a bulletin manifest that is not an array", () => {
   assert.throws(() => groupBulletins({}), /must be an array/i);
+});
+
+test("normalizes newsletter entries and sorts newest first", () => {
+  const newsletters = normalizeNewsletters([
+    { filename: "PTEQ NL 20260625.pdf", date: "20260625", path: "newsletters/PTEQ NL 20260625.pdf" },
+    { filename: "PTEQ NL 20260726.pdf", date: "20260726", path: "newsletters/PTEQ NL 20260726.pdf" },
+    { filename: "Unsafe.pdf", date: "20260727", path: "bulletins/Unsafe.pdf" },
+  ]);
+
+  assert.deepEqual(newsletters.map((item) => item.date), ["20260726", "20260625"]);
+});
+
+test("rejects a newsletter manifest that is not an array", () => {
+  assert.throws(() => normalizeNewsletters({}), /must be an array/i);
 });
 
 test("finds the second Saturday in the current month", () => {

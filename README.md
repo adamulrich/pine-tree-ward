@@ -1,6 +1,6 @@
 # Pine Tree Ward Elders Quorum website
 
-A mobile-first one-page website driven by three published Google Sheets CSV feeds, with a ward bulletin archive generated from `bulletins/manifest.json`.
+A mobile-first one-page website driven by published Google Sheets CSV feeds, with ward bulletin and EQ newsletter archives generated from their respective manifests.
 
 The Temple and Family History and Missionary Efforts sections are placeholders for future ward goals and plans.
 
@@ -48,7 +48,7 @@ The updater discovers the weekly pages from the manual contents, downloads at mo
 
 ## Bulletin archive
 
-The archive groups the Digital and Printout PDFs in `bulletins/manifest.json` by date and displays the newest bulletin first. The production build copies the `bulletins` directory into `dist`, so each automated commit to `main` publishes both the updated manifest and PDFs through the existing GitHub Pages workflow.
+The bulletin archive groups the Digital and Printout PDFs in `bulletins/manifest.json` by date and displays the newest bulletin first. The newsletter archive reads `newsletters/manifest.json`, shows the two newest newsletters initially, and provides a control to reveal the complete list. The production build copies both archive directories into `dist`, so each automated commit to `main` publishes the updated manifests and PDFs through the existing GitHub Pages workflow.
 
 The same Apps Script also watches for PDF attachments sent by `adam.ulrich@live.com` in messages whose subject contains `EQ Newsletter`. Newsletter PDFs are stored under `newsletters/`, indexed separately in `newsletters/manifest.json`, and labeled `Newsletter-Archived` in Gmail after the upload and manifest update succeed. A valid `YYYYMMDD` in the attachment filename is used as its archive date; otherwise, the email's sent date is used and prefixed to the stored filename.
 

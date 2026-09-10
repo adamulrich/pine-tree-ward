@@ -1,9 +1,10 @@
 import { cp, mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const source = resolve("bulletins");
-const destination = resolve("dist", "bulletins");
+const archiveFolders = ["bulletins", "newsletters"];
 
 await mkdir(resolve("dist"), { recursive: true });
-await cp(source, destination, { recursive: true });
-console.log("Copied bulletin archive to dist/bulletins.");
+for (const folder of archiveFolders) {
+  await cp(resolve(folder), resolve("dist", folder), { recursive: true });
+  console.log(`Copied ${folder} archive to dist/${folder}.`);
+}

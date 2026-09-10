@@ -1,6 +1,7 @@
 import { normalizeRows } from "./data.js";
 import { parseCsv } from "./csv.js";
 import { bulletinDate, groupBulletins } from "./bulletins.js";
+import { normalizeNewsletters } from "./newsletters.js";
 import { normalizeScheduleRows, scheduleHeaders } from "./schedule.js";
 import { currentComeFollowMeLesson, splitLessonTitle } from "./come-follow-me.js";
 
@@ -91,13 +92,13 @@ function hideToggle(buttonId) {
   button.setAttribute("aria-expanded", "false");
 }
 
-function setupExpandableList(buttonId, total, noun, render) {
+function setupExpandableList(buttonId, total, noun, render, collapsedCount = compactListSize) {
   const button = document.getElementById(buttonId);
   let expanded = false;
 
   const update = () => {
-    render(expanded ? total : Math.min(compactListSize, total));
-    button.hidden = total <= compactListSize;
+    render(expanded ? total : Math.min(collapsedCount, total));
+    button.hidden = total <= collapsedCount;
     button.setAttribute("aria-expanded", String(expanded));
     button.textContent = expanded ? `Show fewer ${noun}` : `Show all ${total} ${noun}`;
   };
@@ -201,6 +202,58 @@ function createBulletinTable(bulletins) {
     printoutCell.append(createBulletinLink(bulletin.printout, "Print", formattedDate));
 
     row.append(dateCell, digitalCell, printoutCell);
+    body.append(row);
+  }
+
+  table.append(body);
+  return table;
+}
+
+function renderNewsletters(entries) {
+  const target = document.getElementById("newsletters-list");
+  const newsletters = normalizeNewsletters(entries);
+
+  if (!newsletters.length) {
+    hideToggle("newsletters-toggle");
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "There are no archived newsletters yet.");
+    return;
+  }
+
+  setupExpandableList("newsletters-toggle", newsletters.length, "newsletters", (count) => {
+    target.replaceChildren(createNewsletterTable(newsletters.slice(0, count)));
+  }, 2);
+  target.setAttribute("aria-busy", "false");
+}
+
+function createNewsletterTable(newsletters) {
+  const table = document.createElement("table");
+  table.className = "bulletin-table newsletter-table";
+  table.innerHTML = "<thead><tr><th scope=\"col\">Newsletter date</th><th scope=\"col\">Newsletter</th></tr></thead>";
+  const body = document.createElement("tbody");
+
+  for (const newsletter of newsletters) {
+    const formattedDate = bulletinDateFormatter.format(bulletinDate(newsletter.date));
+    const row = document.createElement("tr");
+    const dateCell = document.createElement("th");
+    dateCell.scope = "row";
+    const time = document.createElement("time");
+    time.dateTime = `${newsletter.date.slice(0, 4)}-${newsletter.date.slice(4, 6)}-${newsletter.date.slice(6, 8)}`;
+    time.textContent = formattedDate;
+    dateCell.append(time);
+
+    const linkCell = document.createElement("td");
+    linkCell.dataset.label = "Newsletter";
+    const link = document.createElement("a");
+    link.className = "bulletin-link";
+    link.href = newsletter.path.split("/").map(encodeURIComponent).join("/");
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Open PDF";
+    link.setAttribute("aria-label", `Open EQ newsletter for ${formattedDate}`);
+    linkCell.append(link);
+
+    row.append(dateCell, linkCell);
     body.append(row);
   }
 
@@ -350,6 +403,21 @@ async function loadBulletins() {
   }
 }
 
+async function loadNewsletters() {
+  const target = document.getElementById("newsletters-list");
+
+  try {
+    const response = await fetch("newsletters/manifest.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+    renderNewsletters(await response.json());
+  } catch (error) {
+    console.error("Could not load newsletter archive", error);
+    hideToggle("newsletters-toggle");
+    target.setAttribute("aria-busy", "false");
+    showMessage(target, "The newsletter archive is temporarily unavailable.", true);
+  }
+}
+
 const menuButton = document.querySelector(".menu-button");
 const siteNav = document.getElementById("site-nav");
 
@@ -367,7 +435,7 @@ siteNav.addEventListener("click", (event) => {
 });
 
 renderComeFollowMe();
-Promise.all([...sections.map(loadSection), loadSchedule(), loadBulletins()]);
+Promise.all([...sections.map(loadSection), loadSchedule(), loadBulletins(), loadNewsletters()]);
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {

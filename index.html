@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Announcements, service opportunities, lesson schedules, ward goals and plans, and bulletin archive for the Pine Tree Ward Elders Quorum." />
+    <meta name="description" content="Announcements, service opportunities, lesson schedules, ward goals and plans, bulletins, and newsletters for the Pine Tree Ward Elders Quorum." />
     <meta name="theme-color" content="#173f35" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -45,6 +45,7 @@
           <a href="#temple-family-history">Temple &amp; Family History</a>
           <a href="#missionary-efforts">Missionary</a>
           <a href="#bulletins">Bulletins</a>
+          <a href="#newsletters">Newsletters</a>
         </nav>
       </div>
     </header>
@@ -54,7 +55,7 @@
         <div class="hero-inner">
           <p class="eyebrow">Pine Tree Ward</p>
           <h1 id="welcome-title">Welcome, Brethren</h1>
-          <p class="hero-copy">Stay up to date with quorum announcements, service opportunities, lessons, recurring events, ward goals and plans, and bulletins.</p>
+          <p class="hero-copy">Stay up to date with quorum announcements, service opportunities, lessons, recurring events, ward goals and plans, bulletins, and newsletters.</p>
           <nav class="quick-links" aria-label="Page sections">
             <a href="#announcements"><span aria-hidden="true">▣</span> Announcements</a>
             <a href="#service"><span aria-hidden="true">♡</span> Service</a>
@@ -64,6 +65,7 @@
             <a href="#temple-family-history"><span aria-hidden="true">♧</span> Temple &amp; Family History</a>
             <a href="#missionary-efforts"><span aria-hidden="true">◎</span> Missionary</a>
             <a href="#bulletins"><span aria-hidden="true">▧</span> Bulletins</a>
+            <a href="#newsletters"><span aria-hidden="true">N</span> Newsletters</a>
           </nav>
         </div>
       </section>
@@ -212,6 +214,24 @@
           </div>
           <button id="bulletins-toggle" class="show-all-button" type="button" aria-controls="bulletins-list" aria-expanded="false" hidden>
             Show all bulletins
+          </button>
+        </div>
+      </section>
+
+      <section id="newsletters" class="content-section section-light" aria-labelledby="newsletters-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <div class="section-icon" aria-hidden="true">N</div>
+            <div>
+              <p class="section-kicker">Monthly updates</p>
+              <h2 id="newsletters-title">EQ Monthly Newsletters</h2>
+            </div>
+          </div>
+          <div id="newsletters-list" class="bulletin-container" aria-live="polite" aria-busy="true">
+            <div class="loading-card">Loading newsletters…</div>
+          </div>
+          <button id="newsletters-toggle" class="show-all-button" type="button" aria-controls="newsletters-list" aria-expanded="false" hidden>
+            Show all newsletters
           </button>
         </div>
       </section>
