@@ -424,6 +424,16 @@ h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.
 }
 .site-footer p { margin: 0; font-weight: 800; }
 .site-footer a { color: #fff; font-weight: 700; }
+.site-footer .site-disclaimer {
+  max-width: 780px;
+  margin-top: 0.65rem;
+  color: #e4eee9;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.55;
+}
+.site-footer .site-contact { margin-top: 0.35rem; font-weight: 600; }
+.site-contact a { text-underline-offset: 3px; }
 
 @media (max-width: 420px) {
   body { font-size: 17px; }

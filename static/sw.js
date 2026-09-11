@@ -1,4 +1,4 @@
-const cacheName = "pine-tree-ward-v2";
+const cacheName = "pine-tree-ward-v3";
 const appShell = [
   "/",
   "/manifest.webmanifest",

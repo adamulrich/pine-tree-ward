@@ -451,7 +451,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderComeFollowMe();
-Promise.all([...sections.map(loadSection), loadSchedule(), loadBulletins(), loadNewsletters()]);
+Promise.all([...sections.map(loadSection), loadSchedule(), loadNewsletters()]);
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
