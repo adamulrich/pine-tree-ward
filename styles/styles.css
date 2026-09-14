@@ -279,6 +279,8 @@ h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.
   line-height: 1.25;
 }
 
+.goals-card .goals-subheading { margin-top: 1.75rem; }
+
 .goals-list {
   margin: 0;
   padding-left: 1.4rem;
