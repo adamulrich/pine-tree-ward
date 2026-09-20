@@ -426,6 +426,58 @@ function closeMenu() {
   siteNav.classList.remove("is-open");
 }
 
+const installPanel = document.getElementById("install-app");
+const installButton = document.getElementById("install-button");
+const installCopy = document.getElementById("install-copy");
+const iosInstallSteps = document.getElementById("ios-install-steps");
+let deferredInstallPrompt = null;
+
+function isStandaloneApp() {
+  return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+}
+
+function isIosDevice() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function hideInstallPanel() {
+  installPanel.hidden = true;
+}
+
+function setupInstallExperience() {
+  if (isStandaloneApp()) return;
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    installCopy.textContent = "Add this website to your home screen for quick access.";
+    iosInstallSteps.hidden = true;
+    installButton.hidden = false;
+    installPanel.hidden = false;
+  });
+
+  installButton.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+
+    deferredInstallPrompt.prompt();
+    const { outcome } = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    if (outcome === "accepted") hideInstallPanel();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    hideInstallPanel();
+  });
+
+  if (isIosDevice()) {
+    installCopy.textContent = "On your iPhone or iPad, use your browser's Share menu to add this website to your home screen.";
+    iosInstallSteps.hidden = false;
+    installPanel.hidden = false;
+  }
+}
+
 menuButton.addEventListener("click", () => {
   const open = menuButton.getAttribute("aria-expanded") === "true";
   menuButton.setAttribute("aria-expanded", String(!open));
@@ -452,6 +504,7 @@ document.addEventListener("keydown", (event) => {
 
 renderComeFollowMe();
 Promise.all([...sections.map(loadSection), loadSchedule(), loadNewsletters()]);
+setupInstallExperience();
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {

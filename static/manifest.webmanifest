@@ -3,6 +3,7 @@
   "name": "Pine Tree Ward Elders Quorum",
   "short_name": "Pine Tree EQ",
   "description": "Announcements, schedules, goals, and newsletters for the Pine Tree Ward Elders Quorum.",
+  "prefer_related_applications": false,
   "lang": "en-US",
   "start_url": "/",
   "scope": "/",
