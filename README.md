@@ -100,4 +100,18 @@ The production site is created in `dist`.
 
 The workflow in `.github/workflows/deploy-pages.yml` builds and publishes the site whenever `main` is updated. In the GitHub repository, open **Settings → Pages** and select **GitHub Actions** as the source.
 
-The deployment workflow publishes the site at `https://pine-tree-ward.ulrichlabs.dev` and sets the Vite base path to `/` for that custom domain. Local builds use relative asset paths so the `dist` folder also works with an ordinary static server.
+The deployment workflow publishes the site at `https://pinetreeward.org` and sets the Vite base path to `/` for that custom domain. The `static/CNAME` file is copied into the production artifact so GitHub Pages keeps the custom domain attached to deployments. Local builds use relative asset paths so the `dist` folder also works with an ordinary static server.
+
+### Namecheap DNS
+
+In Namecheap **Advanced DNS**, replace the parking records with these records:
+
+| Type | Host | Value |
+| --- | --- | --- |
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `adamulrich.github.io` |
+
+After DNS propagation, GitHub Pages will provision the certificate. The apex domain is the canonical site address; `www.pinetreeward.org` can redirect to it once its CNAME is active.
