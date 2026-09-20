@@ -429,7 +429,7 @@ function closeMenu() {
 const installPanel = document.getElementById("install-app");
 const installButton = document.getElementById("install-button");
 const installCopy = document.getElementById("install-copy");
-const iosInstallSteps = document.getElementById("ios-install-steps");
+const manualInstallSteps = document.getElementById("manual-install-steps");
 let deferredInstallPrompt = null;
 
 function isStandaloneApp() {
@@ -439,6 +439,10 @@ function isStandaloneApp() {
 function isIosDevice() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent)
     || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function isAndroidDevice() {
+  return /Android/.test(navigator.userAgent);
 }
 
 function hideInstallPanel() {
@@ -452,7 +456,7 @@ function setupInstallExperience() {
     event.preventDefault();
     deferredInstallPrompt = event;
     installCopy.textContent = "Add this website to your home screen for quick access.";
-    iosInstallSteps.hidden = true;
+    manualInstallSteps.hidden = true;
     installButton.hidden = false;
     installPanel.hidden = false;
   });
@@ -473,7 +477,12 @@ function setupInstallExperience() {
 
   if (isIosDevice()) {
     installCopy.textContent = "On your iPhone or iPad, use your browser's Share menu to add this website to your home screen.";
-    iosInstallSteps.hidden = false;
+    manualInstallSteps.hidden = false;
+    installPanel.hidden = false;
+  } else if (isAndroidDevice()) {
+    installCopy.textContent = "In Chrome, open the three-dot menu to install this website on your home screen.";
+    manualInstallSteps.innerHTML = "<li>Tap Chrome's three-dot menu.</li><li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li><li>Confirm the installation.</li>";
+    manualInstallSteps.hidden = false;
     installPanel.hidden = false;
   }
 }
