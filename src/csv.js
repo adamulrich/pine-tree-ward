@@ -49,5 +49,5 @@ export function parseCsv(text, requiredHeaders = defaultHeaders) {
 
   return dataRows
     .filter((row) => row.some((value) => value.trim()))
-    .map((row) => Object.fromEntries(requiredHeaders.map((header) => [header, row[headers.indexOf(header)]?.trim() ?? ""])));
+    .map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index]?.trim() ?? ""])));
 }

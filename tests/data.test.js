@@ -51,6 +51,11 @@ test("parses quoted CSV fields containing commas and line breaks", () => {
   assert.equal(rows[1].Text, "Two-line\nannouncement");
 });
 
+test("preserves optional CSV columns", () => {
+  const rows = parseCsv("Display Date,Expires On,Text,Link,Title\n09/27/2026,09/30/2026,Hello,,Important notice");
+  assert.equal(rows[0].Title, "Important notice");
+});
+
 test("rejects a CSV feed with missing required columns", () => {
   assert.throws(() => parseCsv("Display Date,Text\n09/13/2026,Hello"), /missing columns/i);
 });
