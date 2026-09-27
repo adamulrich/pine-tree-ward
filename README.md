@@ -1,6 +1,6 @@
 # Pine Tree Ward Elders Quorum website
 
-A mobile-first one-page website driven by published Google Sheets CSV feeds, with ward bulletin and EQ newsletter archives generated from their respective manifests.
+A mobile-first one-page website driven by published Google Sheets CSV feeds, with a dated ward banner, ward bulletin and EQ newsletter archives generated from their respective manifests.
 
 The Temple and Family History and Missionary Efforts sections are placeholders for future ward goals and plans.
 

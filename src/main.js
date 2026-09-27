@@ -28,6 +28,7 @@ const sections = [
 ];
 
 const scheduleUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBCs8631vmwVW7lFBpljj9qe6jX1ixsyBTQMGzymRQJzipcmEIJB1-fEtiFjFZkc_c4RsK88vPLclH/pub?gid=97794274&single=true&output=csv";
+const bannerUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBCs8631vmwVW7lFBpljj9qe6jX1ixsyBTQMGzymRQJzipcmEIJB1-fEtiFjFZkc_c4RsK88vPLclH/pub?gid=1494821455&single=true&output=csv";
 const compactListSize = 4;
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -139,6 +140,69 @@ async function loadSection(config) {
     console.error(`Could not load ${config.target}`, error);
     hideToggle(config.toggle);
     showMessage(target, config.error, true);
+  }
+}
+
+function renderBanner(rows) {
+  const target = document.getElementById("site-banner");
+  const banner = normalizeRows(rows ?? [])[0];
+
+  if (!banner) {
+    target.hidden = true;
+    target.replaceChildren();
+    return;
+  }
+
+  const inner = document.createElement("div");
+  inner.className = "site-banner-inner";
+
+  const content = document.createElement("div");
+  content.className = "site-banner-content";
+
+  const label = document.createElement("p");
+  label.className = "site-banner-label";
+  label.textContent = "Ward update";
+
+  const text = document.createElement("p");
+  text.className = "site-banner-text";
+  text.textContent = banner.text;
+  content.append(label, text);
+
+  if (banner.displayDate) {
+    const time = document.createElement("time");
+    time.className = "site-banner-date";
+    time.dateTime = banner.displayDate.toISOString().slice(0, 10);
+    time.textContent = dateFormatter.format(banner.displayDate);
+    content.insertBefore(time, text);
+  }
+
+  inner.append(content);
+
+  if (banner.link) {
+    const link = document.createElement("a");
+    link.className = "site-banner-link";
+    link.href = banner.link;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Learn more";
+    link.setAttribute("aria-label", `Learn more: ${banner.text}`);
+    inner.append(link);
+  }
+
+  target.replaceChildren(inner);
+  target.hidden = false;
+}
+
+async function loadBanner() {
+  const target = document.getElementById("site-banner");
+
+  try {
+    const response = await fetch(bannerUrl, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+    renderBanner(parseCsv(await response.text()));
+  } catch (error) {
+    console.error("Could not load banner", error);
+    target.hidden = true;
   }
 }
 
@@ -512,7 +576,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderComeFollowMe();
-Promise.all([...sections.map(loadSection), loadSchedule(), loadNewsletters()]);
+Promise.all([...sections.map(loadSection), loadSchedule(), loadNewsletters(), loadBanner()]);
 setupInstallExperience();
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {

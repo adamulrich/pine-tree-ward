@@ -62,6 +62,54 @@ button:focus-visible {
   border-bottom: 4px solid var(--gold);
 }
 
+.site-banner {
+  background: var(--gold);
+  color: var(--green-950);
+  border-bottom: 3px solid var(--green-950);
+}
+
+.site-banner[hidden] { display: none; }
+
+.site-banner-inner {
+  width: min(980px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 0.85rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.site-banner-content { min-width: 0; }
+.site-banner-label {
+  margin: 0 0 0.1rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.site-banner-date {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+.site-banner-text { margin: 0; font-weight: 700; line-height: 1.4; }
+.site-banner-link {
+  min-height: 48px;
+  padding: 0.55rem 1rem;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--green-950);
+  border-radius: 6px;
+  color: var(--green-950);
+  font-weight: 900;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.site-banner-link:hover { background: var(--green-950); color: #fff; }
+
 .header-inner {
   width: min(1280px, calc(100% - 2rem));
   min-height: 76px;
@@ -514,6 +562,8 @@ h2 { margin-bottom: 0; color: var(--green-950); font-size: clamp(1.8rem, 7vw, 2.
   .section-icon { width: 44px; height: 44px; flex-basis: 44px; font-size: 1.3rem; }
   h2 { font-size: clamp(1.65rem, 8vw, 2.1rem); overflow-wrap: anywhere; }
   .item-text { overflow-wrap: anywhere; }
+  .site-banner-inner { width: 100%; padding: 0.85rem 1rem; align-items: stretch; flex-direction: column; gap: 0.75rem; }
+  .site-banner-link { justify-content: center; }
 }
 
 @media (max-width: 600px) {
