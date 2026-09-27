@@ -34,6 +34,14 @@ test("requires text and an expiration date and sorts by display date", () => {
   assert.equal(items[0].link, "https://example.org");
 });
 
+test("preserves an optional title for banner rows", () => {
+  const items = normalizeRows([
+    { "Display Date": "09/27/2026", "Expires On": "09/30/2026", Title: "Important notice", Text: "Read this", Link: "" },
+  ], new Date(2026, 8, 27));
+
+  assert.equal(items[0].title, "Important notice");
+});
+
 test("parses quoted CSV fields containing commas and line breaks", () => {
   const csv = 'Display Date,Expires On,Text,Link\r\n09/13/2026,09/14/2026,"Bring gloves, rakes, and bags.","https://example.org/a,b"\r\n09/20/2026,09/20/2026,"Two-line\nannouncement",';
   const rows = parseCsv(csv);

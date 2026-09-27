@@ -25,6 +25,7 @@ export function normalizeRows(rows, now = new Date()) {
     .map((row) => ({
       displayDate: parseDate(row["Display Date"]),
       expiresOn: parseDate(row["Expires On"]),
+      title: String(row.Title ?? "").trim(),
       text: String(row.Text ?? "").trim(),
       link: String(row.Link ?? "").trim(),
     }))
