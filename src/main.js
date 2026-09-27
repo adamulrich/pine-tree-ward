@@ -161,7 +161,7 @@ function renderBanner(rows) {
 
   const label = document.createElement("p");
   label.className = "site-banner-label";
-  label.textContent = "Ward update";
+  label.textContent = "Alert notice";
 
   const text = document.createElement("p");
   text.className = "site-banner-text";
