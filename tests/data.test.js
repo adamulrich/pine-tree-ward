@@ -42,6 +42,14 @@ test("preserves an optional title for banner rows", () => {
   assert.equal(items[0].title, "Important notice");
 });
 
+test("combines an optional instructor with lesson text", () => {
+  const items = normalizeRows([
+    { "Display Date": "09/27/2026", "Expires On": "09/27/2026", Instructor: "Georgina", Text: "Lesson topic", Link: "" },
+  ], new Date(2026, 8, 1), { includeInstructor: true });
+
+  assert.equal(items[0].text, "Instructor: Georgina — Lesson topic");
+});
+
 test("parses quoted CSV fields containing commas and line breaks", () => {
   const csv = 'Display Date,Expires On,Text,Link\r\n09/13/2026,09/14/2026,"Bring gloves, rakes, and bags.","https://example.org/a,b"\r\n09/20/2026,09/20/2026,"Two-line\nannouncement",';
   const rows = parseCsv(csv);

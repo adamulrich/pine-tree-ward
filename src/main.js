@@ -22,6 +22,7 @@ const sections = [
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBCs8631vmwVW7lFBpljj9qe6jX1ixsyBTQMGzymRQJzipcmEIJB1-fEtiFjFZkc_c4RsK88vPLclH/pub?gid=1834157588&single=true&output=csv",
     target: "lessons-list",
     toggle: "lessons-toggle",
+    includeInstructor: true,
     empty: "There are no upcoming lessons.",
     error: "The lesson schedule is temporarily unavailable.",
   },
@@ -113,7 +114,7 @@ function setupExpandableList(buttonId, total, noun, render, collapsedCount = com
 
 function renderSection(config, rows) {
   const target = document.getElementById(config.target);
-  const items = normalizeRows(rows ?? []);
+  const items = normalizeRows(rows ?? [], new Date(), { includeInstructor: config.includeInstructor });
 
   if (!items.length) {
     hideToggle(config.toggle);

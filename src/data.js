@@ -20,15 +20,21 @@ function endOfDay(date) {
   return result;
 }
 
-export function normalizeRows(rows, now = new Date()) {
+export function normalizeRows(rows, now = new Date(), options = {}) {
   return rows
-    .map((row) => ({
-      displayDate: parseDate(row["Display Date"]),
-      expiresOn: parseDate(row["Expires On"]),
-      title: String(row.Title ?? "").trim(),
-      text: String(row.Text ?? "").trim(),
-      link: String(row.Link ?? "").trim(),
-    }))
+    .map((row) => {
+      const text = String(row.Text ?? "").trim();
+      const instructor = String(row.Instructor ?? "").trim();
+      return {
+        displayDate: parseDate(row["Display Date"]),
+        expiresOn: parseDate(row["Expires On"]),
+        title: String(row.Title ?? "").trim(),
+        text: options.includeInstructor && instructor
+          ? `Instructor: ${instructor} — ${text}`
+          : text,
+        link: String(row.Link ?? "").trim(),
+      };
+    })
     .filter((item) => item.text && item.expiresOn && endOfDay(item.expiresOn) >= now)
     .sort((a, b) => {
       if (!a.displayDate && !b.displayDate) return 0;
